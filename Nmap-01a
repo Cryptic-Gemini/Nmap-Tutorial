@@ -1,0 +1,208 @@
+
+
+
+                                                          Nmap 
+                                                         -------
+
+Nmap, short for Network Mapper, is a free, open-source tool for vulnerability scanning and network discovery. Network administrators use Nmap to identify what devices are running on their systems, discovering hosts that are available and the services they offer, finding open ports and detecting security risks.
+
+The primary uses of Nmap can be broken into three core processes. First, the program gives you detailed information on every IP active on your networks, and each IP can then be scanned. This allows administrators to check whether an IP is being used by a legitimate service, or by an external attacker.
+
+Secondly, Nmap provides information on your network as a whole. It can be used to provide a list of live hosts and open ports, as well as identifying the OS of every connected device. This makes it a valuable tool in ongoing system monitoring, as well as a critical part of pentesting. Nmap can be used alongside the Metasploit framework, for instance, to probe and then repair network vulnerabilities.
+
+Thirdly, Nmap has also become a valuable tool for users looking to protect personal and business websites. Using Nmap to scan your own web server, particularly if you are hosting your website from home, is essentially simulating the process that a hacker would use to attack your site. “Attacking” your own site in this way is a powerful way of identifying security vulnerabilities.
+
+
+
+
+download : https://nmap.org
+download on ubuntu: sudo apt-get install nmap
+
+//testing site
+
+Scanme: http://scanme.nmap.org/
+
+In parrot and kali linux it comes preinstalled.
+----------------------------------------------
+
+Get this on: way 1
+-------------------
+Applications==>Parrot==>information Gathering==>nmap
+
+Open Nmap, it will ask yuh for root password.
+
+way 2 :
+-------
+Open terminal and log in with admistrative mode.
+
+==> #nmap --help
+
+
+// you will get example section 
+
+example #1: Scanme: http://scanme.nmap.org/
+
+example #2 IP ranges
+
+ref: Open firefox and search major ip blocks 
+
+Open https://www.nirsoft.net/countryip/
+
+copy one IP and search in browser <who is IP>
+
+use 1st link in webpage to get info
+
+2nd link= geoiplookup (2nd part of who is)
+
+==> #nslookup <domain-name or IP>
+
+nslookup is a network administration command-line tool available in many computer operating systems for querying the Domain Name System (DNS) to obtain domain name or IP address mapping, or other DNS records.
+
+
+==>#nslookup <IP> >> result.txt
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+To check Open Ports
+-------------------------
+
+==> $nmap --help
+
+==> $nmap scanme.nmap.org
+
+//stay away from filterd status ports
+
+==> $ifconfig (to get subnet of home network)
+
+use wlo1: for wifi
+use inet 19*.***.**.* netmask ***.***.***.* broadcast ***.***.**.***
+
+// to save results in specific file
+
+==> $nmap -oG - 192.168.1.0-255 -vv > ~/Desktop/Results
+
+//to hit a specific port 
+
+==> $nmap -oG - 192.168.1.0-255 -p 22 -vv > ~/Desktop/Results
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+To check OS
+-----------
+
+==> $namp --help
+
+==> $nmap -A scanme.nmap.org
+
+==> $nmap -sV scanme.nmap.org (service version)
+
+
+==> $nmap -F scanme.nmap.org (-F gives yuh targeted port)
+
+==> $nmap -F scanme.nmap.org www.google.com > scan.txt
+
+
+==> $ nmap -F www.google.com 192.168.0.1 > scan2.txt 
+
+==> $nmap --open www.google.com > scan3.txt 
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Firewalls are put in place because of tools like NMap. NMap has the power to give you a mapping of a network system. You can see everything, from OS versions to open ports. Firewalls and intrusion detection systems are made to prevent NMap and other programs from getting that information. To evade these firewalls, we have several options. Let's take a look.
+
+         $nmap -f 10.73.31.145
+
+Also, you can type: nmap --send-eth -f 10.73.31.145.
+
+This command will send smaller 8-byte probes instead of a whole packet.
+
+==>MTU stands for Maximum Transmission Unit, which, although similar to -f, will allow you to specify the transmission. You can use any multiples of 8, so you can change your bytes to 8, 16, 32, 64, etc. I just scanned that target the the --mtu option, and 8-byte packets. You may need to add --send-eth to your command to make it work.
+
+                     $ nmap --mtu 8 10.73.31.145
+
+
+==>  Decoy option, that lets you scan using multiple decoy IP addresses. NMap will send several packets from several destinations with this command. To the target, it'll look like it's being scanned from several machines all at once, and the one actually doing the attack will be harder to find. You can also specify exact decoys be using this command: nmap -D decoy1,decoy2 RND:10 10.73.31.145.
+
+                   $ nmap -D RND:10 10.73.31.145
+
+--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Nmap Scripting Engine:
+----------------------
+
+located in /usr/share/nmap/scripts
+
+==> # ls -l /usr/share/nmap/scripts | grep ssh
+
+==> #nmap --script=ssh-hostkey.nse 192.168.1.1
+
+NSE comes pre-loaded with a large number of safe scripts that do their tasks exceptionally well. The next command utilizes the default safe script for version detection.
+
+==>                            $ nmap -sV -sC 192.168.1.1
+
+==> #nmap --script=ssh-brute.nse 192.168.1.1
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+WebMap:
+------
+
+
+$mkdir /tmp/webmap
+
+$docker run -d --name webmap -h webmap -p 8000:8000 -v /tmp/webapp:/opt/xml rev3rse/webapp
+
+Now u can run Nmap and save the XML report in /tmp/webmap
+
+$nmap -sT -A -T4 -oX /tmp/webmap/myscan.xml 192.168.1.0/24
+
+
+
+
+
+ref:https://www.youtube.com/watch?v=nKUhGpED59E&list=PLBf0hzazHTGM8V_3OEKhvCM9Xah3qDdIx&index=5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

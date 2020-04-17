@@ -1,0 +1,583 @@
+1. Scan a Single Host
+---------------------
+
+A host is any machine connected to a particular network. Nmap allows admins to scan hosts using their IP address or hostname easily. The below command scans the 1000 common ports and lists all open ports, their state, and service.
+
+               $ nmap 192.168.1.1
+
+You can replace the IP with the hostname if you want, as shown below.
+
+               $ nmap hostname
+
+2. Scan Multiple Hosts
+----------------------
+
+Scanning multiple hosts at the same time is also very easy using Nmap. You can do this via simply entering the IP or hostnames one after another. The below example demonstrates this for you.
+
+
+                  $ nmap 192.168.1.1 192.168.1.3 192.168.1.5
+
+                     $ nmap hostname1 hostname2 hostname3
+
+Nmap also provides a handy shorthand for this.
+
+                     $ nmap 192.168.1.1,3,5
+
+3. Scan Range of IP Addresses
+-----------------------------
+
+You can also scan a range of IP addresses at once. The following command shows this in action.
+
+                     $ nmap 192.168.1.1-15
+
+This command will scan the first fifteen hosts of the subnetwork. Many people also use the wildcard for this purpose. Adding wildcards to your search will inspect every available host.
+
+                     $ nmap 192.168.1.*
+
+To scan an entire subnet, use the below command.
+
+
+                     $ nmap 192.168.1.1/16
+
+
+ 4. Read Hosts from File and Scan
+----------------------------------
+
+Nmap can read host addresses from files and then scan them for port information. First, create a file containing some hosts, as shown.
+
+                      $ echo -e "192.168.1.1-10 \nlocalhost" >> /tmp/hosts
+
+                      $ cat /tmp/hosts
+
+Now hosts should contain two lines consisting of localhost and the given IP range. Use the following command to read this using Nmap.
+
+                      $ nmap -iL /tmp/hosts
+
+5. Exclude Hosts from Nmap Scan
+--------------------------------
+
+The –exclude option allows users to exclude specific hosts from a given IP range. You can use the –excludefile option to exclude hosts from a file. The below commands demonstrates this for you.
+
+                         $ nmap 192.168.1.1/24 --exclude 192.168.1.1,3,5
+
+                         $ nmap -iL /tmp/hosts --excludefile /tmp/exclude
+
+Here, the /tmp/exclude file contains the hosts that the user isn’t interested in. We’re not showcasing this file for keeping our guide as concise as possible.
+
+
+6. Increase Scan Verbosity
+----------------------------
+
+The default search provides quite limited information. Nmap offers the -v option to add extra verbosity to your search. When used, this flag will force Nmap to output additional information about your search.
+
+                            $ nmap -v 192.168.1.1
+
+Simply adding this flag will enhance the output information by a considerable margin. Plus, it also helps beginners visualize how Nmap works under the hood.
+
+7. Detect OS Information
+------------------------
+
+Nmap is a suitable choice for many when it comes to remote OS detection. The -A flag tells Nmap to find and display OS information about the hosts you’re testing.
+
+                            $ nmap -A 192.168.1.1
+
+                            $ nmap -A -v 192.168.1.1
+
+So you can add the -v flag for getting additional information on your search result. It’s a great way of mastering Nmap commands for beginners. The below command shows you how to detect OS information for hosts residing in a file.
+
+
+                            $ nmap -v -A -iL /tmp/hosts
+
+8. Get Firewall Information of Hosts
+------------------------------------
+
+Any competitive system admin will keep networks behind firewalls. This may feed irrelevant information to potential Nmap searches. However, you can easily find out if a host is protected by a firewall using the next command.
+
+                             $ nmap -sA 192.168.1.1
+
+                            $ nmap -v -sA 192.168.1.1
+
+If you’re a starting Nmap user, we suggest you use the verbose flag v as much as possible. It will help you understand Nmap’s workings in much detail.
+
+9. Scan Firewall Protected Hosts
+--------------------------------
+
+Hosts protected by external firewalls tend to feed unnecessary information to remote scanners like Nmap. If you’ve discovered your host of interest to be protected in such a way, use the below command.
+
+                          $ nmap -PN hostname
+
+                           $ nmap -PN 192.168.1.1
+
+The above IP address represents the wireless router in my network. You can search for any hosts using either the IP or hostname.
+
+scanning protected hosts
+------------------------
+
+
+10. Scan IPv6 Hosts
+---------------------
+Although still not mainstream, IPv6 addresses are there and will become the standard representation of remote hosts in the near future. Nmap already rolls out support for IPv6 scanning. The following command shows you how to do this.
+
+                                  $ nmap -6 hostname
+
+                                  $ nmap --6 2001:0db8:85a3:0000:0000:8a2e:0370:7334
+
+The hexadecimal representation denotes the host in the second example. You can add additional flags to increase the quality of your Nmap search results.
+
+Everyday Nmap Commands for Network Admins
+
+Nmap offers an unending number of commands and scripts useful to network admins, ethical hackers, and penetration testers. We discuss some common but essential commands in the below section.
+
+11. Scan Hosts for Specific Ports
+---------------------------------
+Nmap allows admins to check hosts for only some specific ports. The below commands will demonstrate this with necessary examples.
+
+
+                                $ nmap -p 21,22,80,443 localhost
+
+                                $ nmap -p 21,22,80,443 192.168.1.1
+
+You can also specify a range of ports, as shown below.
+
+                                $ nmap -p 1-65535 localhost
+
+This command will scan your localhost network for all common ports.
+
+12. Additional Port Scanning Methods
+------------------------------------
+Nmap can discover and inspect all types of ports. The next examples demonstrate how to scan for UDP ports, use wildcards, etc. To do UDP port scanning, use the following command.
+
+                                     $ nmap -p U:53, 67, 111 192.168.1.1
+
+To scan both TCP and UDP ports, use the following syntax.
+
+                                   $ nmap -p -T:20-25,80,443 U:53, 67, 111 192.168.1.1
+
+The next one scan for ports using a wildcard. It will scan for all available port configurations for the given host.
+
+
+                                    $ nmap -p "*" 192.168.1.1
+
+The following Nmap command scans for only the 10 most common ports.
+
+                                    $ nmap --top-ports 10 192.168.1.1
+
+13. List Hosts without Port Scanning
+------------------------------------
+
+Since port scanning a host is intrusive, many admins do no directly scan their hosts for ports. Rather they use Nmap to send a simple ping to get a list of available hosts on a network. Malicious attackers also leverage such methods in an attempt to stay invisible.
+
+                                 $ sudo nmap -sn 192.168.1.0/24
+
+You’ll need sudo privileges to get the most out of this command. Else Nmap won’t be able to send the TCP ACK request and may miss potential hosts.
+
+14. Do a Fast Scan of Hosts
+-----------------------------
+
+If you use Nmap for scanning random hosts and ports, it’ll take quite some time. Instead, you could use the fast mode where Nmap searches only for the most common ports and boosts up the scan time by some factors.
+
+                                $ nmap -F 192.168.1.0/24
+                            
+                                $ nmap -F localhost
+
+The -F flag enters Nmap into this fast mode.
+
+
+15. Display Open Ports Only
+----------------------------
+
+Nmap port scans list all open and filtered ports for a host. You can limit your output to only those hosts that have open ports. However, this command also prints out possibly open ports that are perhaps filtered by external applications.
+
+                           $ nmap --open 192.168.1.1
+
+                           $ nmap --open localhost
+
+16. See Why a Port is in a Certain State
+----------------------------------------
+
+Nmap allows users to investigate why a certain port is in some specific state. You’ll need to utilize the –reason option for getting such results. The next command demonstrates this in action.
+
+                            $ nmap --reason localhost
+
+                             $ nmap --reason 192.168.1.1
+
+The above commands will show the reasons behind a port’s current state. This information greatly helps in debugging and allows experts to visualize their target ports better.
+
+17. Display Network Interfaces and Routes
+-------------------------------------------
+
+Understanding network configurations is essential to both security analysts and malicious users. Both want to how a potential host is connected with the worldwide web. You can use Nmap to outline the interfaces and routes of a selected host easily. The next command will show this in action.
+
+                              $ nmap --iflist
+
+The above command will display the routes and interfaces with information like device name, IP, gateway, and so on.
+
+
+18. Set Timing Template
+-------------------------
+One of the most useful features of Nmap is its robust timing parameters. You can easily control the amount of time taken by each Nmap scan using the -T option. The next commands show this in action.
+
+                      $ nmap --top-ports 10 -T4 192.168.1.1
+
+This command will take significantly less time to complete when compared with the standard syntax. You can change the value of -T from 0 to 5, where 5 denotes the most aggressive scan and 0 the most polite. Aggressive timing parameters may cause Nmap to crash the hosts under inspection though. The default Nmap scan utilizes -T3.
+
+nmap timing parameters
+
+19. Enable OS Detection
+-----------------------
+
+Although we’ve shown you how to get OS-specific information using the -A option, there’s another way to do this. The -O flag enables OS detection for a host or range of hosts.
+
+
+                         $ nmap -v -O localhost
+
+                         $ nmap -O 192.168.1.1/24
+
+These Nmap commands might fail to recognize some OS, especially if they’re protected using firewalls. The next example shows you how to use aggressive OS detection for overcoming this.
+
+                        $ nmap -O --osscan-guess 192.168.1.1/24
+
+20. Detect Service and Version Information
+------------------------------------------
+
+The following commands demonstrate how you can use Nmap to detect service and version information. Malicious users usually use this to check whether a host is running any vulnerable service or not.
+
+                        $ nmap -sV 192.168.1.1/24
+
+Adding -sV enables Nmap version detection. It provides much similar information you got earlier using the -A option. Since this command scans all available hosts for the subnet 192.168.1.1/24, it may take a longer time. The next example speeds up this process using the -T option mentioned earlier.
+
+                        $ nmap -T5 -sV 192.168.1.1/24
+
+21. Scan Hosts Using TCP SYN
+-----------------------------
+
+Often you’ll find remote system’s firewalls blocking the standard ICMP pings sent by your usual Nmap port scans. You can use the TCP SYN scan to get out of this situation.
+
+                       $ sudo nmap -PS20-25,80,110,443 192.168.1.1/24
+
+The above command enables Nmap to discover if a host is up and scans its ports without completing the standard TCP communication.
+
+
+22. Scan Hosts Using TCP ACK
+-----------------------------
+
+The TCP ACK method works almost like the above command. However, they work really well at finding the existence of even the most protected remote hosts. Since TCP ACK packets send acknowledging data over established TCP connections, the remote hosts need to let them know their location.
+
+                       $ sudo nmap -PA20-25,80,110,443 192.168.1.1/24
+
+Both of the two above commands allow users to specify ports as they do with -p. However, neither -PS nor -PA allows any space after them. So be aware of this, or else your searches will not bring valid information.
+
+23. Get OS Fingerprints
+------------------------
+OS Fingerprinting refers to collecting passive information of remote hosts during network communications. Nmap allows system admins to do this, as demonstrated below easily. This is useful for cloaking the presence of your scan from the remote system’s firewall but still getting relevant OS information.
+
+
+                      $ nmap -sT 192.168.1.1/24
+
+The above connection scheme is known as TCP connect scan in Nmap.
+
+24. Scan Using IP Protocols
+---------------------------
+
+Sometime you might come across hosts that do not allow the IP protocols you’re sending. You can get around this issue by determining what IP protocols the host allows by using the below command.
+
+                       $ nmap -v -sO 192.168.1.1
+
+Once you get the supported protocols, you can use the appropriate Nmap command to scan this host.
+
+25. Scan for Weaknesses in Firewall/IDS
+--------------------------------------
+
+It’s very common for testers to stumble upon firewalls or intrusion detection systems that reject Nmap’s scanning attempts. Thankfully, robust Nmap commands allow users to get around this issue by giving them firewall information. The below commands will demonstrate this for you.
+
+
+                         $ nmap -sN 192.168.1.1
+
+                         $ nmap -sF 192.168.1.1
+
+                         $ nmap -sX 192.168.1.1
+
+The first command sends a null TCP flag, the second one sets the FIN bit, and the last one sets FIN, PSH, and URG bits. They trick non-stateful firewalls in giving up information about a ports’ state.
+
+Nmap Commands for Ethical Hackers
+---------------------------------
+Ethical hackers are professionals who look for potential flaws, including network flaws in IT infrastructures. They use advanced combinations of Nmap’s options to wrap around things fast. The next section demonstrates some such commands.
+
+26. Scan Remote Hosts using SCTP
+-------------------------------
+The SCTP scan is a silent but useful scan technique preferred by testers due to its effectiveness. Only highly configured IDS systems can detect such scans, so they perform very well in real-life scenarios.
+
+                      $ sudo nmap -sZ --top-ports 20 -T4 192.168.1.1/24
+
+The above command scan for the top 20 common ports for the specified subnet. You can omit the timing parameter if you want to be more stealthy and has no problem to wait for a few more minutes.
+
+27. Scan Remote Hosts using Idle Scan
+------------------------------------
+Also known as Zombie host scan, this type of scan literally creates a zombie host on the network and scan other hosts from that host.
+
+                      $ sudo nmap -sI 192.168.1.103 192.168.1.101
+
+In the above command, 192.168.1.103 is the zombie host, and 192.168.1.101 is the target remote machine.
+
+28. Scan Remote Hosts using ARP Pings
+-------------------------------------
+This is the best Nmap command to discover remote hosts as of now. Since no firewalls can block ARP requests, this is a useful technique for seasoned network testers.
+
+
+                       $ sudo nmap -PR 192.168.1.1
+
+However, you’ll need to have access to the local network if you want to use this command. But it shouldn’t be a problem for professional penetration testers.
+
+29. Determine Route to Remote Host
+----------------------------------
+
+If you’re a seasoned system admin, chances are you’ve already worked with traceroute. It is a compelling UNIX tool that maps routes to target machines in a network. The below command demonstrates how you can use traceroute from Nmap.
+
+                         $ sudo nmap --traceroute 192.168.1.1
+
+This command will output the HOP distances and the times to reach the destination.
+
+
+determine network routes
+-------------------------
+
+
+30. Disable Reverse DNS Resolution for All Hosts:
+--------------------------------------------------
+
+By default, Nmap performs reverse DNS resolution for only hosts that are discovered online. However, they decrease Nmap’s performance by a considerable factor. Ethical hackers usually turn this off for all hosts since they could obtain DNS information legally from their clients.
+
+                             $ nmap -n 192.168.1.1
+
+This will increase your search speed by a significant margin. I usually use this instead of -T to maintain my search speed while still maintaining anonymity.
+
+31. Retrieve Version Information
+--------------------------------
+
+Earlier, we’ve obtained version information for OS and other services. The problem is that most of the time Nmap shows the default services associated with a port. This can cause problems for testers since hosts can use any other services instead of the default service for some ports.
+
+                            $ nmap -V 192.168.1.1
+
+This command will display much relevant information such as the platform, compilation tools, and so on.
+
+
+32. Control Version Detection
+-----------------------------
+
+We’ve shown you how to detect version information of remote services using the standard -sV flag. The following command demonstrates how to control version detection using similar Nmap commands.
+
+                           $ nmap -sV --version-intensity 5 192.168.1.1
+
+This performs very aggressive version detection and is likely to alarm the remote host. You can lower the value of the –version-intensity option to increase anonymity. However, this will limit version detection. The next command performs a light banner grabbing of the specified host.
+
+                          $ nmap -sV --version-intensity 1 192.168.1.1
+
+33. Scan Hosts Using Ip Fragments
+----------------------------------
+
+Nmap allows system admins to scan remote hosts via utilizing fragmented IP packets. It essentially breaks down the IP packets into small parts and makes them hard to detect via external IDS/firewalls.
+
+                          $ sudo nmap -f 192.168.1.1
+
+Users can also set personalized offsets using the –mtu option, as shown below.
+
+
+                          $ sudo nmap --mtu 16 192.168.1.1
+
+34. Use Decoy IP Addresses
+--------------------------
+
+Since most commercial systems are protected by highly configured firewalls, they often detect remote port scans very fast. This is problematic for both security auditors and intrusive system breakers. Nmap allows users to use decoy IPs for cloaking their identity for this purpose.
+
+                          $ nmap --top-ports 10 -D10.1.1.2, 10.1.1.4, 10.1.1.6 192.168.1.1
+
+Let’s assume your IP is the second one(10.1.1.4), and you’re scanning 192.168.1.1. Now the remote host will know about the scan but can’t know for sure about their origin.
+
+Leverage the Nmap Scripting Engine (NSE)
+-----------------------------------------
+
+The Nmap Scripting Engine(NSE) is a robust feature that allows users to utilize a large number of robust scripts for performing effective reconnaissance. The following section demonstrates some common Nmap commands leveraging NSE scripts.
+
+
+35. Use Default Safe Scripts
+---------------------------
+
+NSE comes pre-loaded with a large number of safe scripts that do their tasks exceptionally well. The next command utilizes the default safe script for version detection.
+
+                            $ nmap -sV -sC 192.168.1.1
+
+Usually, scanning with NSE scripts rather than standard options will yield more accurate information. The above command executes the default version detection script for Nmap.
+
+36. Use Specific NSE Scripts
+------------------------------
+
+You can locate all the available NSE scripts in your system using the command $ locate *.nse. These scripts are written using Lua and allows users to create personalized scripts that you want. The next command uses a specific NSE script called whois-ip.
+
+                       $ nmap --script=whois-ip.nse scanme.nmap.org
+
+You can easily replace the hostname with your target IP to get relevant whois information. Note that the .nse extension is not mandatory.
+
+
+37. Scan for Common Files/Directories
+-------------------------------------
+
+The http-enum.nse NSE script sends over 2000 queries for common files and directories. You can use this script to get critical information on whether some known services exist on a remote server or not.
+
+                       $ nmap -n --script=http-enum.nse 192.168.1.1
+
+This command will try to obtain essential service information using the said script.
+
+38. Get HTTP Page Titles
+---------------------------
+
+You can use the Nmap http-title script for obtaining the titles of remote web pages. This can be extremely helpful at deducing the content of remote servers. Check out the below command to see this into action.
+
+                        $ nmap --script=http-title 192.168.1.1
+
+This command will fetch and display the HTTP title.
+
+HTTP page titles
+
+
+39. Use Multiple Script Categories
+----------------------------------
+
+By default, NSE scripts are categorized by their usage, such as brute, discovery, exploit, and vuln. You can instruct Nmap to use all scripts that belong to some categories, as shown below.
+
+                            $ nmap --script discovery,brute 192.168.1.1
+
+The above command will utilize all NSE scripts that belong to the categories’ discovery and brute. So, it will try to discover available hosts and try to brute-force them.
+
+40. Use Wildcards for Script Selection
+--------------------------------------
+
+Nmap allows you to use the wildcard character “*” for selecting all scripts that match some criteria. The following command will utilize all scripts that start with ssh.
+
+                             $ nmap --script "ssh*" 192.168.1.1
+
+You can add additional options to these types of Nmap commands for greater flexibility.
+
+41. Use Boolean Expressions for Script Selection
+-------------------------------------------------
+
+Nmap allows users to select their NSE scripts using boolean expressions such as and, or, not. The below commands will demonstrate some examples of this.
+
+
+                          $ nmap --script "not vuln" 192.168.1.1
+
+                          $ nmap --script "default or broadcast" 192.168.1.1
+
+                          $ nmap --script /path/to/scripts 192.168.1.1
+
+The first example loads all NSE scripts but vuln. The second command loads scripts from either default or broadcast categories. The final example loads scripts from a directory. You can write personalized NSE scripts and load them this way.
+
+42. Get Script Documentation
+------------------------------
+
+Since Nmap offers an abundance of default and custom scripts, it’s hard to remember the details about them. Thankfully, Nmap offers excellent documentation for its NSE scripts. The below commands will show you how to invoke them for detailed information.
+
+                            $ nmap --script-help "ssh-*"
+
+                            $ nmap --script-help "ssh-*" and "discovery"
+
+The first example shows help for all scripts that start with ssh- and the second one shows discovery scripts alongside the ssh-ones.
+
+Miscellaneous Nmap Commands
+---------------------------
+---------------------------
+
+Since Nmap commands allow users to combine a plethora of options, you can easily create an unending number of commands. We outline some often used commands in the below section.
+
+43. Inspect Heartbleed Vulnerability
+----------------------------------------
+
+located in /usr/share/nmap/scripts
+
+The SSL Heartbleed vulnerability is a well-known attack surface for starting malicious attackers. The next command checks whether a host contains this vulnerability using the NSE script heartbleed.
+
+                        $ nmap -sV -p 443 --script=ssl-heartbleed 192.168.1.1
+
+The output of this command can help network admins to check for outdated SSL services and patch them before any intrusion attempts.
+
+44. Retrieve IP Information
+---------------------------
+
+Digging up IP information is one of the first tasks remote attackers do when checking up on a target. Some essential IP information includes whois data, geolocation, etc. The next command illustrates Nmap’s usage in such passive reconnaissance.
+
+                       $ nmap --script=whois*,ip-geolocation-maxmind,asn-query 192.168.1.1
+
+This command finds out information about the remote host’s whois entry, geolocation, and asn queries using ready-made NSE scripts.
+
+45. Save Nmap Outputs
+-----------------------
+
+Although Nmap’s default output format is great, often, you’ll want to save your scan output for later use. It’s very easy, as you can see from the below examples.
+
+                        $ nmap -oN scan-report -n 192.168.1.1
+
+                        $ nmap -n 192.168.1.1 > scan-report
+
+The first example scans the remote host and saves the output to a file called scan-report in the current directory. You can also do this using the Unix redirection operator, as demonstrated by the second example.
+
+46. Additional Output Formats
+------------------------------
+
+There’re several Nmap commands that allow users to format their output more conveniently. The below examples demonstrate some essential ones for you.
+
+                             $ nmap -oX scan-report.xml -n 192.168.1.1
+
+                             $ nmap -oG scan-report -n 192.168.1.1
+
+                             $ nmap -oA scan-report -n 192.168.1.1
+
+The first one saves scan results as an XML file. The second example saves the result in a format that can be easily accessed by grep. The last example tells Nmap to save results in all formats.
+
+Nmap output for grep
+----------------------
+---------------------
+
+47. Scan DDoS Reflective UDP Services
+----------------------------------------
+
+Often attackers leverage UDP-based DDoS attacks for taking down remote targets. The following Nmap command scans a target network for such DDoS reflective services and provides tips on how to block them altogether,
+
+                  $ nmap –sU –A –PN –n –pU:19,53,161 –script=snmp-sysdescr,dns-recursion,ntp-monlist 192.168.1.1
+
+Although seemingly complex, it is nothing but a command with several options and scripts.
+
+48. Feed Nmap Scan Results to Nikto
+-----------------------------------
+
+Nikto is a compelling vulnerability scanner that is used to detect dangerous files, misconfigured CGIs, legacy servers, and so on. The following command feeds Nmap scan results to Nikto.
+
+                    $ nmap --top-ports 10 192.168.1.1/24 -oG - | /path/of/nikto.pl -h -
+
+Now Nikto will use your Nmap result for performing its own scan.
+
+49. Grab Banner Using NSE Script
+--------------------------------
+
+Banner grabbing is a widely used information-gathering technique that reveals service information of open ports in remote hosts. The below command grabs the banners of a network using the NSE banner script.
+
+                $ nmap --script=banner 192.168.1.1/24
+
+50. Consult Nmap Documentation
+------------------------------
+
+Since Nmap has largely grown over time, it’s pretty hard to remember all of its functions for beginners. Luckily, the Nmap documentation provides excellent information to help to start users with this issue.
+
+                       $ nmap --help
+
+                       $ man nmap
+
+The first command will provide you with all available options for Nmap. You can consult the manual if looking for detailed information using the last one.
+
+Ending Thoughts
+Nmap commands are far more powerful than many people think. Experienced users can easily discover vulnerable web servers and related information using just a few commands. Hackers rely on such information to craft their exploits and compromise remote hosts. So, it’s essential for network admins to know these stuff and fix such issues for their infrastructures.
+
+Another important thing to keep in mind when using such scanning techniques is legality. Most people simply won’t like you sniffing their network. So, always gain authorized privileges before performing such tasks. However, you can practice them in personal virtual machines or containerized platforms.
+
+
+
+
+
