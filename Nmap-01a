@@ -152,19 +152,42 @@ WebMap:
 ------
 
 
-$mkdir /tmp/webmap
+$ mkdir /tmp/webmap
+$ docker run -d \
+         --name webmap \
+         -h webmap \
+         -p 8000:8000 \
+         -v /tmp/webmap:/opt/xml \
+         reborntc/webmap
 
-$docker run -d --name webmap -h webmap -p 8000:8000 -v /tmp/webapp:/opt/xml rev3rse/webapp
+$ # now you can run Nmap and save the XML Report on /tmp/webmap
+$ nmap -sT -A -T4 -oX /tmp/webmap/myscan.xml 192.168.1.0/24
 
-Now u can run Nmap and save the XML report in /tmp/webmap
 
-$nmap -sT -A -T4 -oX /tmp/webmap/myscan.xml 192.168.1.0/24
+Now point your browser to http://localhost:8000
 
+Generate new token
+In order to access to the WebMap dashboard, you need a token. You can create a new token with:
+
+$ docker exec -ti webmap /root/token
+Upgrade from previous release
+$ # stop running webmap container
+$ docker stop webmap
+
+$ # remove webmap container
+$ docker rm webmap
+
+$ # pull new image from dockerhub
+$ docker pull reborntc/webmap
+
+$ # run WebMap
+$ curl -sL http://bit.ly/webmapsetup | bash
 
 
 
 
 ref:https://www.youtube.com/watch?v=nKUhGpED59E&list=PLBf0hzazHTGM8V_3OEKhvCM9Xah3qDdIx&index=5
+    https://github.com/SabyasachiRana/WebMap.git
 
 
 
